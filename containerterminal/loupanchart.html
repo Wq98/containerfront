@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+<link href="style/authority/common_style.css" rel="stylesheet" type="text/css">
+<link href="style/authority/zTreeStyle.css" rel="stylesheet" type="text/css">
+<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+ <link rel="stylesheet" href="css/style.css"/>
+ 
+
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="scripts/zTree/jquery.ztree.core-3.2.js"></script>
+<script type="text/javascript" src="scripts/fancybox/jquery.fancybox-1.3.4.js"></script>
+<script type="text/javascript" src="scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="style/authority/jquery.fancybox-1.3.4.css" media="screen"/></link>
+<script type="text/javascript" src="scripts/artDialog/artDialog.js?skin=default"></script>
+<script src="assets/layer/layer.js" type="text/javascript" ></script>
+ 
+
+<title>堆场图设计</title> 
+<script type="text/javascript">
+	
+		/** ----------------leftMenu zTree部分开始----------------  **/
+		var zTree;
+		var setting = {
+			view : {
+				dblClickExpand : false,
+				showLine : true,
+				selectedMulti : false,
+				expandSpeed : ($.browser.msie && parseInt($.browser.version) <= 6) ? ""
+						: "fast"
+			},
+			data : {
+				key : {
+					name : "weiduName"
+				},
+				simpleData : {
+					enable : true,
+					idKey : "weiduID",
+					pIdKey : "parentID",
+					rootPId : ""
+				}
+			},
+			callback : {
+				beforeClick : beforeClick,
+				onClick : onClick
+			}
+		};
+
+		var zNodes = [
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":0,"weiduCode":"FANGYUANGUANLI","weiduGrade":0,"weiduID":5,"weiduName":"堆场图设计","weiduOrder":2,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":5,"weiduCode":"KANGJUXINCHENG","weiduGrade":1,"weiduID":6,"weiduName":"1号箱区","weiduOrder":1,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":5,"weiduCode":"YULANXIAOQU","weiduGrade":1,"weiduID":77,"weiduName":"2号箱区","weiduOrder":2,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":5,"weiduCode":"HESHENGYUAN","weiduGrade":1,"weiduID":83,"weiduName":"3号箱区","weiduOrder":3,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":83,"weiduCode":" HESHENGYUAN1HAOLOU","weiduGrade":2,"weiduID":84,"weiduName":" 1号块区","weiduOrder":1,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"KANGJUXINCHENG500HAO1DONG","weiduGrade":2,"weiduID":16,"weiduName":"1号块区","weiduOrder":1,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":77,"weiduCode":"YULANXIAOQU2HAOLOU","weiduGrade":2,"weiduID":78,"weiduName":"1号块区","weiduOrder":1,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":77,"weiduCode":"YULANXIAOQU5HAOLOU","weiduGrade":2,"weiduID":79,"weiduName":"2号块区","weiduOrder":2,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"KANGJUXINCHENG500HAO2DONG","weiduGrade":2,"weiduID":17,"weiduName":"2号块区","weiduOrder":2,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":83,"weiduCode":" HESHENGYUAN2HAOLOU","weiduGrade":2,"weiduID":85,"weiduName":" 2号块区","weiduOrder":2,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"KANGJUXINCHENG500HAO3DONG","weiduGrade":2,"weiduID":69,"weiduName":"3号块区","weiduOrder":3,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":77,"weiduCode":"YULANXIAOQU7HAOLOU","weiduGrade":2,"weiduID":80,"weiduName":"3号块区","weiduOrder":3,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":77,"weiduCode":"YULANXIAOQU8HAOLOU","weiduGrade":2,"weiduID":81,"weiduName":"4号块区","weiduOrder":4,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"RUIJINGHEPAN20HAOLOU","weiduGrade":2,"weiduID":72,"weiduName":"4号块区","weiduOrder":4,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"RUIJINGHEPAN22HAOLOU","weiduGrade":2,"weiduID":73,"weiduName":"5号块区","weiduOrder":5,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"RUIJINGHEPAN23HAOLOU","weiduGrade":2,"weiduID":74,"weiduName":"6号块区","weiduOrder":6,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":6,"weiduCode":"RUIJINGHEPAN24HAOLOU","weiduGrade":2,"weiduID":75,"weiduName":"7号块区","weiduOrder":7,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":75,"weiduCode":"RUIJINGHEPAN24HAOLOU","weiduGrade":3,"weiduID":751,"weiduName":"1号贝位","weiduOrder":7,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":74,"weiduCode":"RUIJINGHEPAN24HAOLOU","weiduGrade":3,"weiduID":751,"weiduName":"1号贝位","weiduOrder":7,"weiduType":"FANGYUANGUANLI"},
+		{"checked":false,"crospID":0,"delFlag":1,"parentID":16,"weiduCode":"RUIJINGHEPAN24HAOLOU","weiduGrade":3,"weiduID":161,"weiduName":"1号贝位","weiduOrder":7,"weiduType":"FANGYUANGUANLI"}];
+		$(document).ready(function() {
+			$.fn.zTree.init($("#tree"), setting, zNodes);
+			zTree = $.fn.zTree.getZTreeObj("tree");
+			// 默认展开所有节点
+			zTree.expandAll(true);
+		});
+
+		function beforeClick(treeId, treeNode) {
+		//	var check = (treeNode && treeNode.isParent && treeNode.weiduGrade != 1&& treeNode.weiduGrade != 2);
+			if (treeNode.weiduGrade != 3) {
+				art.dialog({icon:'error', title:'友情提示', drag:false, resize:false, content:'只能选择贝位', ok:true,});
+				return false;
+			}
+			return true;
+		}
+
+
+		/** 左键单击 **/
+		function onClick(e, treeId, treeNode) {
+			var fyXqCode = treeNode.getParentNode().weiduID;
+			var fyDhCode = treeNode.weiduID;
+			var a=treeNode.weiduName.substring(0,1);
+			var b=treeNode.getParentNode().weiduName.substring(0,1);
+			var c=treeNode.getParentNode().getParentNode().weiduName.substring(0,1);
+			var param=a+b+c;
+		    
+			$('#table tbody').html("");			
+			$.ajax({
+                url:"http://www.ct.com/yard/queryByYardId?yardId="+param,
+                dataType:"json",
+                type:"get",
+                success:function(data){
+				var arr=data.data;
+				var tr;
+				console.log(data);
+                  
+				
+				   for(var k=1;k<=6;k++){
+				  tr='<td style="color:#1853A1;">'+k+'层</td>'
+				  for(var j=1;j<=8;j++){
+				    if(in_array(param+j+k,arr)){
+				    tr+='<td width="40"  style="background-color: #b51d1a" unitname="'+j+'"><a href="#" class="fy_table_td" style="color:#fff;" id="sort_add" onclick="details(&quot;'+param+j+k+'&quot;)">'+param+j+k+'</a></td>';
+				    }else{
+					tr+='<td width="40"  style="background-color: #000EFF" unitname="'+j+'"><a href="#" class="fy_table_td" style="color:#fff;" onclick="details(&quot;'+param+j+k+'&quot;)">'+param+j+k+'</a></td>';
+					}
+				  }
+				  $("#table").append('<tr>'+tr+'</tr>');
+				  }
+				  
+                },
+                error : function(){
+                    alert("请求失败");
+                }
+            });
+		//	$("#submitForm").attr("action","/xngzf/archives/showLoupanChart.action?fyXqCode="+ fyXqCode + "&fyDhCode=" + fyDhCode).submit();
+		}
+		/** ----------------leftMenu  zTree部分开始----------------  **/
+		
+function in_array(stringToSearch, arrayToSearch) {
+    for (s = 0; s < arrayToSearch.length; s++) {
+        thisEntry = arrayToSearch[s].toString();
+        if (thisEntry == stringToSearch) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function details(yardId){
+    document.getElementById("input1").value=null;
+	document.getElementById("input2").value=null;
+	document.getElementById("input3").value=null;
+	document.getElementById("input4").value=null;
+	document.getElementById("input5").value=null;
+	document.getElementById("input6").value=null;
+ $.ajax({
+		url:"http://www.ct.com/yard/queryById?yardId="+yardId,
+		type:"get",
+		dataType:"json",
+		success:function(result){
+			//result是服务端返回的数据
+			console.log(result.data);
+			if(result.code==200){
+			   document.getElementById("input1").value=yardId;
+			   document.getElementById("input2").value=result.data.containerId;
+			   document.getElementById("input3").value=result.data.storingTime;
+			   document.getElementById("input4").value=result.data.inTime;
+			   document.getElementById("input5").value=result.data.outTime;
+			   document.getElementById("input6").value=result.data.state;
+			}
+		},
+		error:function(){
+			layer.alert('请求失败！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+		}
+	});
+	layer.open({
+        type: 1,
+        title: '入场',
+		maxmin: true, 
+		shadeClose: false, //点击遮罩关闭层
+        area : ['750px' , ''],
+        content:$('#sort_style_add'),
+		btn:['提交','取消'],
+		yes:function(index,layero){	
+		 var num=0;
+		 var str="";
+     $(".sort_style_add input[type$='text']").each(function(n){
+          if($(this).val()=="")
+          {
+               
+			   layer.alert(str+=""+$(this).attr("name")+"不能为空！\r\n",{
+                title: '提示框',				
+				icon:0,								
+          }); 
+		    num++;
+            return false;            
+          } 
+		 });
+		  if(num>0){  
+		  return false;
+		  }else{
+		  var containerId=$('#form-field-1').val();
+	      var containerType=$('#form-field-2').val();
+		  var inTime=$('#form-field-3').val();
+		  $.ajax({
+		url:"http://www.ct.com/yard/containerEntry",
+		type:"POST",
+		data:{
+		"containerId":containerId,
+		"containerType":containerType,
+		"inTime":inTime
+		},
+		dataType:"json",
+		success:function(result){
+			//result是服务端返回的数据
+			if(result.status==200){
+				layer.alert('入场成功！',{
+                title: '提示框',				
+			    icon:1,		
+			  });
+			   layer.close(index);
+			   var tr='<td><label><input type="checkbox" class="ace"><span class="lbl"/></span></label></td>'
+			          +'<td>'+result.data.containerId+'</td>'
+					  +'<td>'+result.data.containerType+'</td>'
+					  +'<td>'+result.data.inTime+'</td>'
+					  +'<td>'+dateFmt(result.data.outTime)+'</td>'
+					  +'<td class="td-manage"><a title="出场"  href="javascript:;"  class="btn btn-xs btn-info" id="'+result.data.containerId+'" onclick="containerExit(&quot;'+result.data.containerId+'&quot;)"><i class="fa fa-edit bigger-120"></i>出场</a></td>';
+              $("#sample-table").append('<tr>'+tr+'</tr>');		   
+			}else{
+			layer.alert('入场失败！',{
+                title: '提示框',				
+			    icon:0,		
+			  });
+			   layer.close(index);
+			}
+		},
+		error:function(){
+			layer.alert('请求失败！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+		}
+	});
+		  }		  		     				
+		}
+    });
+}
+</script>
+	
+	
+<script type="text/javascript">
+	
+</script>
+<style type="text/css">
+	#sider{
+		position: absolute;
+		top: 0;
+		left: 25px;
+		bottom: 0px;
+		width: 260px;
+		border: 1px solid #DEDFDF;
+	}
+	
+	#main{
+		position: absolute;
+		top: 0;
+		left: 285px;
+		right: 0px;
+		bottom: 0px;
+		border: 1px solid #DEDFDF;
+		overflow: auto;
+	}
+	#box_border {
+		border: 1px solid #EDEDED;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+	}
+	#fang_type {
+		list-style-type: none;
+	}
+	#fang_type li{
+		width: 80px;
+		height: 22px;
+		line-height: 22px;
+		color: #FFF;
+		display: inline-block;
+	}
+	
+	.fy_table_td{
+		color: #fff;
+	}
+	
+	.fang_th{
+		background: #044599 no-repeat;
+		text-align: center;
+		border-left: 1px solid #02397F;
+		border-right: 1px solid #02397F;
+		border-bottom: 1px solid #02397F;
+		border-top: 1px solid #02397F;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		font-size: 14px;
+		color: #fff;
+		height: 37px;
+	}
+</style>	
+</head>
+<body>
+    
+	<form id="submitForm" name="submitForm" action="" method="post" enctype="multipart/form-data">
+		<div id="container">
+			<div id="sider">
+				<ul id="tree" class="ztree"></ul>
+			</div>
+			<div id="main">
+				<div id="box_border">
+					<ul id="fang_type">
+						<li style="width: 160px;"><span class="ui_txt_bold05">堆场图设计</span></li>
+						<li style="background-color: #b51d1a;">已满</li>
+						<li style="background-color: #000EFF;">空闲</li>
+						<!--
+						<li style="background-color: #D3D3D3;">未投入使用</li>-->
+					</ul>
+				</div>
+				<table class="unit-the-table table" id="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+					<thead id="unit-thead">
+					  <tr>
+					  <th width="40"  class="fang_th">层列</th>
+					  <th width="40"  class="fang_th">1列</th>
+					  <th width="40"  class="fang_th">2列</th>
+					  <th width="40"  class="fang_th">3列</th>
+					  <th width="40"  class="fang_th">4列</th>
+					  <th width="40"  class="fang_th">5列</th>
+					  <th width="40"  class="fang_th">6列</th>
+					  <th width="40"  class="fang_th">7列</th>
+					  <th width="40"  class="fang_th">8列</th>
+					  </tr>
+					</thead>
+					<tbody>
+						 
+						<!-- 	<tr>
+								<td style="color:#1853A1;">1层</td>
+							    <td width="40"  style="background-color: #D3D3D3" unitname='1'>
+								   <a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458579642011" class="fy_table_td" style="color:#fff;">11111</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='2'>
+								  <a href="javascript:;" class="" style="color:#fff;" id="" onclick="">1-112</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='3'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458667159302" class="fy_table_td" style="color:#fff;">1-113</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='4'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458709870134" class="fy_table_td" style="color:#fff;">1-211</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458762850630" class="fy_table_td" style="color:#fff;">1-212</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458815023215" class="fy_table_td" style="color:#fff;">1-213</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458856106360" class="fy_table_td" style="color:#fff;">1-311</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='8'>
+								    <a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458895470090" class="fy_table_td" style="color:#fff;">1-312</a>
+								</td>
+								
+								
+							</tr>						 
+						 	<tr>
+								<td style="color:#1853A1;">2层</td>
+                                <td width="40"  style="background-color: #D3D3D3" unitname='1'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458592537463" class="fy_table_td" style="color:#fff;">2-121</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='2'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458632171244" class="fy_table_td" style="color:#fff;">2-122</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='3'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458674204381" class="fy_table_td" style="color:#fff;">2-123</a>
+								</td>
+								<td width="40"  style="background-color: #b51d1a;" unitname='4'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458716035781" class="fy_table_td" style="color:#fff;" style="color:#fff;">2-221</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458769094855" class="fy_table_td" style="color:#fff;">2-222</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458821080777" class="fy_table_td" style="color:#fff;">2-223</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458862660086" class="fy_table_td" style="color:#fff;">2-321</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='8'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458901283258" class="fy_table_td" style="color:#fff;">2-322</a>
+								</td>
+								
+							</tr>	 
+						 	<tr>
+								<td style="color:#1853A1;">3层</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='1'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458599318263" class="fy_table_td" style="color:#fff;">3-131</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='2'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458638753194" class="fy_table_td" style="color:#fff;">3-132</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='3'>
+								    <a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458682581758" class="fy_table_td" style="color:#fff;">3-133</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='4'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458722561604" class="fy_table_td" style="color:#fff;">3-231</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458775824339" class="fy_table_td" style="color:#fff;">3-232</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+								    <a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458827335266" class="fy_table_td" style="color:#fff;">3-233</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458868792698" class="fy_table_td" style="color:#fff;">3-331</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='8'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458908609294" class="fy_table_td" style="color:#fff;">3-332</a>
+								</td>
+								
+							</tr>
+						 	<tr>
+								<td style="color:#1853A1;">4层</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='1'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458606278350" class="fy_table_td" style="color:#fff;">4-141</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='2'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458644830000" class="fy_table_td" style="color:#fff;">4-142</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='3'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458689701887" class="fy_table_td" style="color:#fff;">4-143</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='4'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458729044449" class="fy_table_td" style="color:#fff;">4-241</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458787335535" class="fy_table_td" style="color:#fff;">4-242</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458833493856" class="fy_table_td" style="color:#fff;">4-243</a>
+								</td>
+								<td width="40"  style="background-color: #b51d1a;" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458875681904" class="fy_table_td" style="color:#fff;" style="color:#fff;">4-341</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='8'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458914747679" class="fy_table_td" style="color:#fff;">4-342</a>
+								</td>
+								
+							</tr>
+						 	<tr>
+								<td style="color:#1853A1;">5层</td>
+							    <td width="40"  style="background-color: #D3D3D3" unitname='1'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458612828548" class="fy_table_td" style="color:#fff;">5-151</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='2'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458651021626" class="fy_table_td" style="color:#fff;">5-152</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='3'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458696987832" class="fy_table_td" style="color:#fff;">5-153</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='4'>
+								    <a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458744575953" class="fy_table_td" style="color:#fff;">5-251</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458801011635" class="fy_table_td" style="color:#fff;">5-252</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458839607546" class="fy_table_td" style="color:#fff;">5-253</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458883493520" class="fy_table_td" style="color:#fff;">5-351</a>
+								</td>
+								<td width="40" style="background-color: #000EFF" unitname='8'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458924838698" class="fy_table_td" style="color:#fff;">5-352</a>
+								</td>
+								
+							</tr>
+						 	<tr>
+								<td style="color:#1853A1;">6层</td>
+								<td width="40" style="background-color: #000EFF" unitname='1'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458619251417" class="fy_table_td" style="color:#fff;">6-161</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='2'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458657101639" class="fy_table_td" style="color:#fff;">6-162</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='3'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458703663113" class="fy_table_td" style="color:#fff;">6-163</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='4'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458751752209" class="fy_table_td" style="color:#fff;">6-261</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='5'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458808590082" class="fy_table_td" style="color:#fff;">6-262</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='6'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458846045169" class="fy_table_td" style="color:#fff;">6-263</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='7'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458889588928" class="fy_table_td" style="color:#fff;">6-361</a>
+								</td>
+								<td width="40"  style="background-color: #D3D3D3" unitname='8'>
+									<a href="/xngzf/archives/fangyuanRentHistory.action?fyID=14458930982536" class="fy_table_td" style="color:#fff;">6-362</a>
+								</td>
+								
+							</tr>-->
+							
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
+	<div class="sort_style_add margin" id="sort_style_add" style="display:none;padding-right:100px;">
+  <div class="">
+     <ul>
+      <li><label class="label_name">堆场编号</label><div class="col-sm-9"><input name="堆场编号" type="text" id="input1" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+	  <li><label class="label_name">集装箱编号</label><div class="col-sm-9"><input name="集装箱编号" type="text" id="input2" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+	  <li><label class="label_name">存储时长</label><div class="col-sm-9"><input name="存储时长" type="text" id="input3" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+	  <li><label class="label_name">入场时间</label><div class="col-sm-9"><input name="入场时间" type="date" id="input4" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+	  <li><label class="label_name">出场时间</label><div class="col-sm-9"><input name="出场时间" type="date" id="input5" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+	  <li><label class="label_name">状态</label><div class="col-sm-9"><input name="状态" type="text" id="input6" placeholder="" class="col-xs-10 col-sm-5"></div></li>
+      
+     </ul>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+         <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/style.css"/>       
+        <link rel="stylesheet" href="assets/css/ace.min.css" />
+        <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="Widget/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+        <link href="Widget/icheck/icheck.css" rel="stylesheet" type="text/css" />   
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+        <!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+	    <script src="js/jquery-1.9.1.min.js"></script>   
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/typeahead-bs2.min.js"></script>
+		<!-- page specific plugin scripts -->
+		<script src="assets/js/jquery.dataTables.min.js"></script>
+		<script src="assets/js/jquery.dataTables.bootstrap.js"></script>
+        <script type="text/javascript" src="js/H-ui.js"></script> 
+        <script type="text/javascript" src="js/H-ui.admin.js"></script> 
+        <script src="assets/layer/layer.js" type="text/javascript" ></script>
+        <script src="assets/laydate/laydate.js" type="text/javascript"></script>
+        <script type="text/javascript" src="Widget/zTree/js/jquery.ztree.all-3.5.min.js"></script> 
+        <script src="js/lrtk.js" type="text/javascript" ></script>
+<title>堆场价格信息编辑</title>
+</head>
+
+<body>
+<form>
+<div class="margin clearfix">
+ <div class="article_style">
+    <div class="add_content" id="form-article-add" style="padding-left:30px">
+     <ul>
+      <li class="clearfix Mandatory">
+      <label class="label_name">收费标准</label><span class="formControls col-10"><input name="收费标准" type="text" id="input1" class="col-xs-10 col-sm-5 "></span>
+      </li>
+	  <li class="clearfix Mandatory">
+      <label class="label_name">超时标准</label><span class="formControls col-10"><input name="超时标准" type="text" id="input2" class="col-xs-10 col-sm-5 "></span>
+      </li>
+	  <li class="clearfix Mandatory">
+      <label class="label_name">生效时间</label><span class="formControls col-10"><input name="生效时间" type="date" id="input3" class="col-xs-10 col-sm-5 "></span>
+      </li>
+      <li class="clearfix Mandatory">
+      <label class="label_name">失效时间</label><span class="formControls col-10"><input name="失效时间" type="date" id="input4" class="col-xs-10 col-sm-5 "></span>
+      </li>
+	 
+     </ul>
+    <div class="Button_operation" style="margin-left:200px">
+				<button onclick="submitYardPrice();" class="btn btn-primary radius" type="button">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
+				<button onclick="layer_close();" class="btn btn-default radius" type="reset">&nbsp;&nbsp;重置&nbsp;&nbsp;</button>
+			</div>
+    </div>
+ </div>
+</div>
+</form>
+</body>
+</html>
+<script type="text/javascript">
+window.onload=function(){
+   var url=window.location.href;
+   var priceId=url.split("?")[1];
+    document.getElementById("input1").value=null;
+	document.getElementById("input2").value=null;
+	document.getElementById("input3").value=null;
+	document.getElementById("input4").value=null;
+	$.ajax({
+		url:"http://www.ct.com/data/queryYardPriceById?priceId="+priceId,
+		type:"get",
+		dataType:"json",
+		success:function(result){
+			if(result.code==200){
+			   document.getElementById("input1").value=result.data.priceStandard;
+			   document.getElementById("input2").value=result.data.overTimeStandard;
+			   document.getElementById("input3").value=result.data.effectiveTime;
+			   document.getElementById("input4").value=result.data.failureTime;
+			}
+		},
+		error:function(){
+			layer.alert('请求失败！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+		}
+	});
+}
+/**提交操作**/
+function submitYardPrice(){
+var url=window.location.href;
+   var priceId=url.split("?")[1];
+  var priceStandard=$('#input1').val();
+  var overTimeStandard=$('#input2').val();
+  var effectiveTime=$('#input3').val();
+  var failureTime=$('#input4').val();
+	$.ajax({
+		url:"http://www.ct.com/data/updateYardPrice",
+		type:"POST",
+		data:{
+		"priceId":priceId,
+		"priceStandard":priceStandard,
+		"overTimeStandard":overTimeStandard,
+		"effectiveTime":effectiveTime,
+		"failureTime":failureTime
+		},
+		dataType:"json",
+		success:function(result){
+			//result是服务端返回的数据
+			if(result.code==200){
+			  layer.alert('修改成功！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+			  layer.close(this);			   
+			}else{
+			layer.alert('修改失败！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+			}
+		},
+		error:function(){
+			layer.alert('请求失败！',{
+               title: '提示框',				
+			   icon:1,		
+			  });
+		}
+	});
+}
+function dateFmt(value){
+    if(null!=value&&""!=value){
+        var date = new Date(value);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        if(m<10){
+            m="0"+m;
+        }
+        var d = date.getDate();
+        if(d<10){
+            d="0"+d;
+        }
+        return y + '-' +m + '-' + d;
+    }else{
+        return "";
+    }
+}
+</script>
